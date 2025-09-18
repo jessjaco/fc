@@ -15,7 +15,6 @@ extern void unmiximage_(
     double *outNull,
     double *fractionsImage
 );
-
 // Python wrapper function that only takes 4 inputs
 static PyObject* py_unmiximage(PyObject* self, PyObject* args) {
     PyArrayObject *image_obj, *endMemberMatrix_obj, *fractionsImage_obj;
@@ -39,7 +38,7 @@ static PyObject* py_unmiximage(PyObject* self, PyObject* args) {
     // Ensure the image array is Fortran-contiguous (column-major)
     int new_image_obj = 0;
     if (!PyArray_ISFARRAY(image_obj)) {
-        image_obj = (PyArrayObject*) PyArray_FromAny(image_obj,
+        image_obj = (PyArrayObject*) PyArray_FromAny((PyObject*) image_obj,
                                                      PyArray_DescrFromType(NPY_DOUBLE),
                                                      3, 3, NPY_ARRAY_F_CONTIGUOUS, NULL);
         // track if image_obj was replaced, so we can clean up later
@@ -52,7 +51,7 @@ static PyObject* py_unmiximage(PyObject* self, PyObject* args) {
 
     // Ensure the endMemberMatrix array is Fortran-contiguous (column-major)
     if (!PyArray_ISFARRAY(endMemberMatrix_obj)) {
-        endMemberMatrix_obj = (PyArrayObject*) PyArray_FromAny(endMemberMatrix_obj,
+        endMemberMatrix_obj = (PyArrayObject*) PyArray_FromAny((PyObject*) endMemberMatrix_obj,
                                                                PyArray_DescrFromType(NPY_DOUBLE),
                                                                2, 2, NPY_ARRAY_F_CONTIGUOUS, NULL);
         if (endMemberMatrix_obj == NULL) {
